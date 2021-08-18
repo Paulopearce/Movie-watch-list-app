@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Watch list</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+
+<body style="background-color: orange;">
+  
+  <div class="container-sm g-0">
+    
+    <div class="row">
+      <h1 class="mx-auto">Movie Watchlist</h1>
+      <div class="col pt-3">
+        <form>
+          <p>
+            <label for="name">Movie</label>
+            <input type="text" name="name" id="name">
+          </p>
+          <button id="search">Search</button>
+        </form>
+        <div id="movie"></div>
+      </div>
+      <div class="col">
+        <h1>Watchlist</h1>
+        <hr>
+        <div id="saved"></div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    document.getElementById('search').addEventListener('click', event => {
+      event.preventDefault()
+      const name = document.getElementById('name').value
+      axios.get(`http://www.omdbapi.com/?apikey=trilogy&t=${name}`)
+        .then(res => {       
+          event.preventDefault()       
+          const movie = res.data  
+          document.getElementById('movie').innerHTML = `
+          <h1>${movie.Title}</h1>
+          <img src="${movie.Poster}" alt="${movie.name}">
+          <p>
+            <button id="save">Add to list</button>
+          </p>`       
+          document.getElementById('save').addEventListener('click', event => {
+            event.preventDefault()
+            let movieElem = document.createElement('li')
+            movieElem.innerHTML = `
+            <span>${movie.Title}</span>
+            <img src="${movie.Poster}" alt="${movie.name}">
+            <button class="delete">delete X</button>`
+            document.getElementById('saved').append(movieElem)
+            document.getElementById('name').value = ''
+          })
+          document.addEventListener('click', event => {
+            if (event.target.className === 'delete') {
+              event.target.parentNode.remove()
+            } 
+          })
+        })
+        .catch(err => console.error(err))
+    
+    })
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+</body>
+
+</html>
