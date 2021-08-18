@@ -40,7 +40,7 @@
     document.getElementById('search').addEventListener('click', event => {
       event.preventDefault()
       const name = document.getElementById('name').value
-      axios.get(`http://www.omdbapi.com/?apikey=trilogy&t=${name}`)
+      axios.get(`https://www.omdbapi.com/?apikey=trilogy&t=${name}`)
         .then(res => {       
           event.preventDefault()       
           const movie = res.data  
